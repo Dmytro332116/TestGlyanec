@@ -1,0 +1,6 @@
+framework module Pods_Glyanec {
+  umbrella header "Pods-Glyanec-umbrella.h"
+
+  export *
+  module * { export * }
+}

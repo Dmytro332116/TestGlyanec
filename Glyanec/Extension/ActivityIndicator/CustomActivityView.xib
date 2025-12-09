@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_0" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CustomActivityView" customModule="AltTikTok" customModuleProvider="target">
+            <connections>
+                <outlet property="activityIndicator" destination="cSW-UR-vuG" id="gEk-Bz-LkJ"/>
+                <outlet property="contentView" destination="H7c-D8-cda" id="jWl-be-LLT"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="H7c-D8-cda">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wHO-Kr-zKT">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hMD-dN-Mq2">
+                            <rect key="frame" x="157" y="398" width="100" height="100"/>
+                            <subviews>
+                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="cSW-UR-vuG">
+                                    <rect key="frame" x="31.5" y="31.5" width="37" height="37"/>
+                                    <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </activityIndicatorView>
+                            </subviews>
+                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstItem="cSW-UR-vuG" firstAttribute="centerX" secondItem="hMD-dN-Mq2" secondAttribute="centerX" id="6Zg-HZ-4Gs"/>
+                                <constraint firstItem="cSW-UR-vuG" firstAttribute="centerY" secondItem="hMD-dN-Mq2" secondAttribute="centerY" id="abB-mi-yDk"/>
+                                <constraint firstAttribute="width" constant="100" id="gPT-wq-HGP"/>
+                                <constraint firstAttribute="height" constant="100" id="gqq-Hu-ap2"/>
+                            </constraints>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                    <integer key="value" value="15"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="hMD-dN-Mq2" firstAttribute="centerY" secondItem="wHO-Kr-zKT" secondAttribute="centerY" id="5fQ-Oa-tbq"/>
+                        <constraint firstItem="hMD-dN-Mq2" firstAttribute="centerX" secondItem="wHO-Kr-zKT" secondAttribute="centerX" id="oA2-qN-h54"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="15"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="wHO-Kr-zKT" firstAttribute="trailing" secondItem="FEl-WL-Soq" secondAttribute="trailing" id="EHq-hY-Mlq"/>
+                <constraint firstItem="wHO-Kr-zKT" firstAttribute="bottom" secondItem="FEl-WL-Soq" secondAttribute="bottom" id="LbR-33-fBo"/>
+                <constraint firstItem="wHO-Kr-zKT" firstAttribute="top" secondItem="FEl-WL-Soq" secondAttribute="top" id="RFD-58-liP"/>
+                <constraint firstItem="wHO-Kr-zKT" firstAttribute="leading" secondItem="FEl-WL-Soq" secondAttribute="leading" id="nH7-mc-xyV"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="FEl-WL-Soq"/>
+            <point key="canvasLocation" x="211.875" y="-92.957746478873247"/>
+        </view>
+    </objects>
+</document>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="ProximaNova-Bold.ttf">
+            <string>ProximaNova-Bold</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteListTVCell" rowHeight="74" id="S5f-v8-GJE" customClass="FavoriteListTVCell" customModule="Glyanec" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="69"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="S5f-v8-GJE" id="hgd-2H-WmW">
+                <rect key="frame" x="0.0" y="0.0" width="414" height="69"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6kj-UW-7Rg">
+                        <rect key="frame" x="10" y="26" width="34.5" height="17.5"/>
+                        <fontDescription key="fontDescription" name="ProximaNova-Bold" family="Proxima Nova" pointSize="14"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TsX-aB-Udz">
+                        <rect key="frame" x="358.5" y="26" width="14.5" height="17.5"/>
+                        <fontDescription key="fontDescription" name="ProximaNova-Bold" family="Proxima Nova" pointSize="14"/>
+                        <color key="textColor" red="0.4823529411764706" green="0.4823529411764706" blue="0.56862745098039214" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="greenArrowRight" translatesAutoresizingMaskIntoConstraints="NO" id="eC4-Ff-on5">
+                        <rect key="frame" x="385" y="28.5" width="12" height="12"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="12" id="BeE-zQ-0eL"/>
+                            <constraint firstAttribute="width" constant="12" id="iDe-BD-E2J"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="TsX-aB-Udz" firstAttribute="centerY" secondItem="hgd-2H-WmW" secondAttribute="centerY" id="5LK-zg-a1h"/>
+                    <constraint firstItem="6kj-UW-7Rg" firstAttribute="centerY" secondItem="hgd-2H-WmW" secondAttribute="centerY" id="8nz-cf-y9J"/>
+                    <constraint firstItem="6kj-UW-7Rg" firstAttribute="leading" secondItem="hgd-2H-WmW" secondAttribute="leading" constant="10" id="G04-cO-osZ"/>
+                    <constraint firstItem="eC4-Ff-on5" firstAttribute="centerY" secondItem="hgd-2H-WmW" secondAttribute="centerY" id="HOd-Li-SEq"/>
+                    <constraint firstItem="eC4-Ff-on5" firstAttribute="leading" secondItem="TsX-aB-Udz" secondAttribute="trailing" constant="12" id="Ugg-Ci-vY0"/>
+                    <constraint firstAttribute="trailing" secondItem="eC4-Ff-on5" secondAttribute="trailing" constant="17" id="vkB-KD-yqx"/>
+                </constraints>
+            </tableViewCellContentView>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="number" keyPath="vCornerRadius">
+                    <real key="value" value="10"/>
+                </userDefinedRuntimeAttribute>
+            </userDefinedRuntimeAttributes>
+            <connections>
+                <outlet property="actionIV" destination="eC4-Ff-on5" id="eQW-CN-lmZ"/>
+                <outlet property="countL" destination="TsX-aB-Udz" id="qEg-5F-o9E"/>
+                <outlet property="titleL" destination="6kj-UW-7Rg" id="w2w-Wa-Kpf"/>
+            </connections>
+            <point key="canvasLocation" x="-13.043478260869566" y="-244.75446428571428"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="greenArrowRight" width="16" height="16"/>
+    </resources>
+</document>
