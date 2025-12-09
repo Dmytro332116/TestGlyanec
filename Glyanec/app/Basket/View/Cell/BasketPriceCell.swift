@@ -13,22 +13,18 @@ class BasketPriceCell: UITableViewCell {
     
     weak var delegate: BasketPriceCellDelegate?
     
-    func config(list: [ItemBasketModel]) {        
+    func config(list: [ItemBasketModel]) {
         title0L.text = "Товари"
         title1L.text = "Загальна вартість"
         price0L.text = String(format: "%@ %@", String(purchaseСalculation(list: list)), "₴")
         price1L.text = String(format: "%@ %@", String(purchaseСalculation(list: list)), "₴")
-        
+
         self.delegate?.updatePrice(price: purchaseСalculation(list: list))
     }
     
     func purchaseСalculation(list: [ItemBasketModel]) -> Double {
-        var totalPrise:Double = 0.0
-        
-        for item in list {
-            totalPrise = totalPrise + Double(item.price)!
+        list.reduce(0.0) { partialResult, item in
+            partialResult + (item.price ?? 0) * Double(item.qty ?? 0)
         }
-        
-        return totalPrise
     }
 }

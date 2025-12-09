@@ -4,7 +4,7 @@ import Alamofire
 class Glyanec {
     
     static var apiEndpoint: String {
-        return "https://v3magazin.glyanec.net/"
+        return glyanecBaseUrl
     }
 }
 
@@ -16,28 +16,23 @@ class NetworkSessionManager {
     init() {
         let configuration = URLSessionConfiguration.default
         var headers = SessionManager.defaultHTTPHeaders
-        let accessToken = KeyChain.get(key:  KeyConstant.userToken) ?? "HsjMeygEdGkgtsB5QnpovXM22nuzifon"
+        let accessToken = KeyChain.get(key:  KeyConstant.userToken)
 
         headers["Content-Type"] = "application/json"
         headers["accept-language"] = Locale.current.languageCode
         
-        if accessToken.count > 0 {
-            headers["X-TOKEN"] = "HsjMeygEdGkgtsB5QnpovXW22nuzifon"
+        if let accessToken, !accessToken.isEmpty {
+            headers["X-TOKEN"] = accessToken
         }
         
         configuration.httpAdditionalHeaders = headers
         configuration.timeoutIntervalForRequest = 60.0
-                
+        let adapter = JWTAccessTokenAdapter()
+
         self.sessionManager = SessionManager(
             configuration: configuration
         )
-//        [
-//        self.sessionManager = SessionManager(
-//            configuration: configuration
-//        )
-        
-//        let adapter = JWTAccessTokenAdapter()
-//        self.sessionManager.adapter = adapter
-//        self.sessionManager.retrier = adapter
+        self.sessionManager.adapter = adapter
+        self.sessionManager.retrier = adapter
     }
 }

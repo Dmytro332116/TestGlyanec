@@ -14,7 +14,14 @@ public struct ResultAuthLoginAPIModel: Codable, Equatable {
 public struct ResultAuthLoginModel: Decodable {
     let token_type: String?
     let token: String?
+    let refresh_token: String?
     let expires_at: String?
+}
+
+public struct ResultAuthRefreshModel: Decodable {
+    let token: String?
+    let refresh_token: String?
+    let token_type: String?
 }
 
 public struct ResultAuthSignUpModel: Decodable {

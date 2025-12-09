@@ -83,9 +83,13 @@
 		A84548F72556D3CE00D479A1 /* KeyConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A84548372556D3CD00D479A1 /* KeyConstant.swift */; };
 		A84548F82556D3CE00D479A1 /* KeyConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A84548372556D3CD00D479A1 /* KeyConstant.swift */; };
 		A84548F92556D3CE00D479A1 /* KeyConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = A84548372556D3CD00D479A1 /* KeyConstant.swift */; };
-		A84548FA2556D3CE00D479A1 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A84548382556D3CD00D479A1 /* Coordinator.swift */; };
-		A84548FB2556D3CE00D479A1 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A84548382556D3CD00D479A1 /* Coordinator.swift */; };
-		A84548FC2556D3CE00D479A1 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A84548382556D3CD00D479A1 /* Coordinator.swift */; };
+                A84548FA2556D3CE00D479A1 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A84548382556D3CD00D479A1 /* Coordinator.swift */; };
+                A84548FB2556D3CE00D479A1 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A84548382556D3CD00D479A1 /* Coordinator.swift */; };
+                A84548FC2556D3CE00D479A1 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A84548382556D3CD00D479A1 /* Coordinator.swift */; };
+                5D4F9F202C0E1B6C00F5B111 /* BasketStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4F9F1E2C0E1B6C00F5B111 /* BasketStore.swift */; };
+                5D4F9F212C0E1B6C00F5B111 /* BasketStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4F9F1E2C0E1B6C00F5B111 /* BasketStore.swift */; };
+                5D4F9F222C0E1B6C00F5B111 /* FavoritesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4F9F1F2C0E1B6C00F5B111 /* FavoritesStore.swift */; };
+                5D4F9F232C0E1B6C00F5B111 /* FavoritesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4F9F1F2C0E1B6C00F5B111 /* FavoritesStore.swift */; };
 		A84548FD2556D3CE00D479A1 /* ItemDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A845483C2556D3CE00D479A1 /* ItemDetailsViewModel.swift */; };
 		A84548FE2556D3CE00D479A1 /* ItemDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A845483C2556D3CE00D479A1 /* ItemDetailsViewModel.swift */; };
 		A84548FF2556D3CE00D479A1 /* ItemDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A845483C2556D3CE00D479A1 /* ItemDetailsViewModel.swift */; };
@@ -357,10 +361,12 @@
 		A84548322556D3CD00D479A1 /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		A84548332556D3CD00D479A1 /* LoadingSpinner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingSpinner.swift; sourceTree = "<group>"; };
 		A84548342556D3CD00D479A1 /* CompositionRoot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompositionRoot.swift; sourceTree = "<group>"; };
-		A84548352556D3CD00D479A1 /* KeyChain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyChain.swift; sourceTree = "<group>"; };
-		A84548362556D3CD00D479A1 /* BaseAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseAlert.swift; sourceTree = "<group>"; };
-		A84548372556D3CD00D479A1 /* KeyConstant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyConstant.swift; sourceTree = "<group>"; };
-		A84548382556D3CD00D479A1 /* Coordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+                A84548352556D3CD00D479A1 /* KeyChain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyChain.swift; sourceTree = "<group>"; };
+                A84548362556D3CD00D479A1 /* BaseAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseAlert.swift; sourceTree = "<group>"; };
+                A84548372556D3CD00D479A1 /* KeyConstant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyConstant.swift; sourceTree = "<group>"; };
+                A84548382556D3CD00D479A1 /* Coordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+                5D4F9F1E2C0E1B6C00F5B111 /* BasketStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasketStore.swift; sourceTree = "<group>"; };
+                5D4F9F1F2C0E1B6C00F5B111 /* FavoritesStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritesStore.swift; sourceTree = "<group>"; };
 		A845483C2556D3CE00D479A1 /* ItemDetailsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemDetailsViewModel.swift; sourceTree = "<group>"; };
 		A845483E2556D3CE00D479A1 /* ItemDetails.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ItemDetails.storyboard; sourceTree = "<group>"; };
 		A84548412556D3CE00D479A1 /* ItemCharacteristicsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemCharacteristicsCell.swift; sourceTree = "<group>"; };
@@ -653,13 +659,15 @@
 				A84548312556D3CD00D479A1 /* CurrentUser.swift */,
 				A84548322556D3CD00D479A1 /* ViewModel.swift */,
 				A84548332556D3CD00D479A1 /* LoadingSpinner.swift */,
-				A84548342556D3CD00D479A1 /* CompositionRoot.swift */,
-				A84548352556D3CD00D479A1 /* KeyChain.swift */,
-				A84548362556D3CD00D479A1 /* BaseAlert.swift */,
-				A84548372556D3CD00D479A1 /* KeyConstant.swift */,
-				A84548382556D3CD00D479A1 /* Coordinator.swift */,
-			);
-			path = Infrastructure;
+                                A84548342556D3CD00D479A1 /* CompositionRoot.swift */,
+                                A84548352556D3CD00D479A1 /* KeyChain.swift */,
+                                A84548362556D3CD00D479A1 /* BaseAlert.swift */,
+                                A84548372556D3CD00D479A1 /* KeyConstant.swift */,
+                                A84548382556D3CD00D479A1 /* Coordinator.swift */,
+                                5D4F9F1E2C0E1B6C00F5B111 /* BasketStore.swift */,
+                                5D4F9F1F2C0E1B6C00F5B111 /* FavoritesStore.swift */,
+                        );
+                        path = Infrastructure;
 			sourceTree = "<group>";
 		};
 		A84548392556D3CE00D479A1 /* app */ = {
@@ -1460,8 +1468,10 @@
 				A8454A142556D3CF00D479A1 /* NetworkFavorites.swift in Sources */,
 				A84548E52556D3CE00D479A1 /* CurrentUser.swift in Sources */,
 				A8E58E20256784C4007CC0F4 /* NetworkCategoryItems.swift in Sources */,
-				A84548F72556D3CE00D479A1 /* KeyConstant.swift in Sources */,
-				A8454A3B2556D3CF00D479A1 /* UIViewController.swift in Sources */,
+                                A84548F72556D3CE00D479A1 /* KeyConstant.swift in Sources */,
+                                5D4F9F202C0E1B6C00F5B111 /* BasketStore.swift in Sources */,
+                                5D4F9F222C0E1B6C00F5B111 /* FavoritesStore.swift in Sources */,
+                                A8454A3B2556D3CF00D479A1 /* UIViewController.swift in Sources */,
 				A84549AE2556D3CE00D479A1 /* MainViewController+Extension.swift in Sources */,
 				A84549DE2556D3CF00D479A1 /* Glyanec.swift in Sources */,
 				A8246D4E2591EC54001B47C1 /* BasketViewController+Extension.swift in Sources */,
@@ -1537,9 +1547,11 @@
 				A821540A25624462008C816A /* ProductsViewController+Extention.swift in Sources */,
 				A84548F52556D3CE00D479A1 /* BaseAlert.swift in Sources */,
 				A8454A152556D3CF00D479A1 /* NetworkFavorites.swift in Sources */,
-				A84548E62556D3CE00D479A1 /* CurrentUser.swift in Sources */,
-				A84548F82556D3CE00D479A1 /* KeyConstant.swift in Sources */,
-				A8454A3C2556D3CF00D479A1 /* UIViewController.swift in Sources */,
+                                A84548E62556D3CE00D479A1 /* CurrentUser.swift in Sources */,
+                                A84548F82556D3CE00D479A1 /* KeyConstant.swift in Sources */,
+                                5D4F9F212C0E1B6C00F5B111 /* BasketStore.swift in Sources */,
+                                5D4F9F232C0E1B6C00F5B111 /* FavoritesStore.swift in Sources */,
+                                A8454A3C2556D3CF00D479A1 /* UIViewController.swift in Sources */,
 				A84549AF2556D3CE00D479A1 /* MainViewController+Extension.swift in Sources */,
 				A84549DF2556D3CF00D479A1 /* Glyanec.swift in Sources */,
 				A84548DA2556D3CE00D479A1 /* Constant.swift in Sources */,

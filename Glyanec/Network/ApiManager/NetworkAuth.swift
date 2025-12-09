@@ -5,9 +5,9 @@ import Alamofire
 class NetworkAuth {
     
     static private var baseUrl: String {
-        return Glyanec.apiEndpoint + "api/auth/"
+        return Glyanec.apiEndpoint + "auth/api/v1.0/"
     }
-    
+
     static private var tryLoginUrl: String {
         return baseUrl + "try_login"
     }
@@ -18,6 +18,10 @@ class NetworkAuth {
 
     static private var logoutUrl: String {
         return baseUrl + "logout"
+    }
+
+    static private var refreshTokenUrl: String {
+        return baseUrl + "refresh_token"
     }
     
     //MARK: Authorization
@@ -42,7 +46,12 @@ class NetworkAuth {
                     }
                     do {
                         let authLoginModel = try JSONDecoder().decode(ResultAuthLoginModel.self, from: data)
-                        KeyChain.set(key: KeyConstant.userToken, string: authLoginModel.token!)
+                        if let token = authLoginModel.token {
+                            KeyChain.set(key: KeyConstant.userToken, string: token)
+                        }
+                        if let refreshToken = authLoginModel.refresh_token {
+                            KeyChain.set(key: KeyConstant.userRefreshToken, string: refreshToken)
+                        }
                         resolver.fulfill(true)
                     } catch {
                         print("Error: \(error)")
@@ -103,6 +112,39 @@ class NetworkAuth {
                     }
                     
                     return resolver.reject(NetworkError.nonResultError)
+            }
+        }
+    }
+
+    static func refreshToken(refreshToken: String) -> Promise<ResultAuthRefreshModel> {
+        return Promise<ResultAuthRefreshModel> { resolver in
+            let parameters: Parameters = [
+                "refresh_token": refreshToken
+            ]
+
+            NetworkSessionManager.shared
+                .sessionManager
+                .request(refreshTokenUrl,
+                         method: .post,
+                         parameters: parameters,
+                         encoding: JSONEncoding.default,
+                         headers: nil)
+                .validate()
+                .responseJSON { response in
+
+                    guard let data = response.data else { return resolver.reject(NetworkError.nonResultError) }
+
+                    if let errorMessage = NetworkErrorHandler.containsError(data: data) {
+                        return resolver.reject(APIError(errorData: errorMessage))
+                    }
+
+                    do {
+                        let refreshModel = try JSONDecoder().decode(ResultAuthRefreshModel.self, from: data)
+                        resolver.fulfill(refreshModel)
+                    } catch {
+                        print("Error: \(error)")
+                        resolver.reject(NetworkError.nonResultError)
+                    }
             }
         }
     }

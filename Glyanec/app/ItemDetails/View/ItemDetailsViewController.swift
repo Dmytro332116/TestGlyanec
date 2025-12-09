@@ -51,20 +51,26 @@ class ItemDetailsViewController: BaseViewController<ItemDetailsViewModel>,ItemDe
     
     func updateCurrentItem() {
         let item = viewModel.itemDetails?.products.first
-        
+
         itemLevelTitle.text = item?.title
-        itemTitle0.text = String(format: "%@ %@", String((item?.price)!), "₴")
-        if item?.price_old != 0.0 {
-            itemTitle1.text = String(format: "%@ %@", String((item?.price_old)!), "₴")
+        if let price = item?.price {
+            itemTitle0.text = String(format: "%@ %@", String(price), "₴")
+        }
+        if let oldPrice = item?.price_old, oldPrice != 0.0 {
+            itemTitle1.text = String(format: "%@ %@", String(oldPrice), "₴")
             itemLevelNumberTitle.isHidden = false
             itemTitle1.isHidden = false
         } else {
             itemTitle1.isHidden = true
             itemLevelNumberTitle.isHidden = true
         }
-        
-        
-        setItemPreviewImageView(image:(item?.images?.first)!)
+
+        let preview = item?.images?.first ?? item?.image ?? ""
+        setItemPreviewImageView(image: preview)
+
+        if let productId = item?.id {
+            updateFavoriteButton(isFavorite: FavoritesStore.shared.isFavorite(id: productId))
+        }
     }
     
     func setItemPreviewImageView(image:String) {
@@ -98,39 +104,25 @@ class ItemDetailsViewController: BaseViewController<ItemDetailsViewModel>,ItemDe
     }
     
     @IBAction func payBAction(_ sender: Any) {
-        let item = viewModel.itemDetails?.products.first
-        
-        var list: [ItemBasketModel] = []
-        var listBasket: [BasketModel] = []
-        if let data = UserDefaults.standard.value(forKey:"ItemBasketModel") as? Data {
-            list = try! PropertyListDecoder().decode(Array<ItemBasketModel>.self, from: data)
-            list.append(ItemBasketModel(id: Int((item?.id)! as String)!,
-                                        title: (item?.title)! as String,
-                                        price: String((item?.price)!),
-                                        image: (item?.images![0])!,
-                                        qty: 1))
-        } else {
-            list.append(ItemBasketModel(id: Int((item?.id)! as String)!,
-                                        title: (item?.title)! as String,
-                                        price: String((item?.price)!),
-                                        image: (item?.images![0])!,
-                                        qty: 1))
-        }
-        
-        if let data = UserDefaults.standard.value(forKey:"BasketModel") as? Data {
-            listBasket = try! PropertyListDecoder().decode(Array<BasketModel>.self, from: data)
-            listBasket.append(BasketModel(id: Int((item?.id)! as String)!,
-                                          qty: 1))
-        } else {
-            listBasket.append(BasketModel(id: Int((item?.id)! as String)!,
-                                          qty: 1))
-        }
-        
-        UserDefaults.standard.set(try? PropertyListEncoder().encode(list), forKey:"ItemBasketModel")
-        UserDefaults.standard.set(try? PropertyListEncoder().encode(listBasket), forKey:"BasketModel")
+        guard let item = viewModel.itemDetails?.products.first,
+              let productId = item.id else { return }
+        let requestItem = BasketRequestItem(id: productId, qty: 1)
 
-        self.appDelegate?.scheduleNotification(notificationType: "Товар додано в кошик", body: (item?.title)!)
-        closeView()
+        LoadingSpinner.shared.startActivity()
+        NetworkPurchases.addItems([requestItem])
+            .done { [weak self] response in
+                LoadingSpinner.shared.stopActivity()
+                BasketStore.shared.update(with: response)
+                if let title = item.title {
+                    self?.appDelegate?.scheduleNotification(notificationType: "Товар додано в кошик", body: title)
+                }
+                self?.closeView()
+            }
+            .catch { [weak self] error in
+                LoadingSpinner.shared.stopActivity()
+                let message = NetworkErrorHandler.errorMessageFrom(error: error)
+                self?.displayErrorNotification(withText: message ?? NetworkErrorHandler.defaultErrorMessage, sticky: false, action: nil, actionName: "Ok")
+            }
     }
 
     @IBAction func basketBAction(_ sender: Any) {
@@ -140,25 +132,21 @@ class ItemDetailsViewController: BaseViewController<ItemDetailsViewModel>,ItemDe
     }
 
     @IBAction func favoriteButtonAction(_ sender: Any) {
-        let item = viewModel.itemDetails?.products.first
-        
-        var list: [ItemBasketModel] = []
-        if let data = UserDefaults.standard.value(forKey:"ItemFavoriteModel") as? Data {
-            list = try! PropertyListDecoder().decode(Array<ItemBasketModel>.self, from: data)
-            list.append(ItemBasketModel(id: Int((item?.id)! as String)!,
-                                        title: (item?.title)! as String,
-                                        price: String((item?.price)!),
-                                        image: (item?.images![0])!,
-                                        qty: 1))
-        } else {
-            list.append(ItemBasketModel(id: Int((item?.id)! as String)!,
-                                        title: (item?.title)! as String,
-                                        price: String((item?.price)!),
-                                        image: (item?.images![0])!,
-                                        qty: 1))
+        guard let item = viewModel.itemDetails?.products.first,
+              let productId = item.id else { return }
+
+        FavoritesStore.shared.toggleFavorite(id: productId) { [weak self] isSuccess in
+            DispatchQueue.main.async {
+                self?.updateFavoriteButton(isFavorite: FavoritesStore.shared.isFavorite(id: productId))
+                if isSuccess, let title = item.title {
+                    self?.appDelegate?.scheduleNotification(notificationType: "Оновлено вибрані", body: title)
+                }
+            }
         }
-        
-        UserDefaults.standard.set(try? PropertyListEncoder().encode(list), forKey:"ItemFavoriteModel")
-        closeView()
+    }
+
+    private func updateFavoriteButton(isFavorite: Bool) {
+        let imageName = isFavorite ? "heartFavorite" : "heartUnFavorite"
+        favoriteButton.setImage(UIImage(named: imageName), for: .normal)
     }
 }
