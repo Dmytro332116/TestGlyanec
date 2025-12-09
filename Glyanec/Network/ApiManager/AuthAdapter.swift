@@ -1,32 +1,29 @@
 import Alamofire
 import Foundation
+import PromiseKit
 
 final class JWTAccessTokenAdapter: RequestAdapter {
-    
-//    private var isRefreshingToken: Bool = false
-    
+    private let lock = NSLock()
+    private var isRefreshingToken: Bool = false
+    private var requestsToRetry: [(Bool) -> Void] = []
+
     private var accessToken = ""
-    
+
     func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
         var urlRequest = urlRequest
         accessToken = UserAuth.token ?? ""
         print("AccessToken",accessToken,"urlRequest = ", urlRequest)
-        
-        if let urlString = urlRequest.url?.absoluteString, urlString.hasPrefix("http://81.171.24.179:8090") {
-//            /// Set the Authorization header value using the access token.
-//            urlRequest.setValue("Bearer " + accessToken, forHTTPHeaderField: "Authorization")
-            urlRequest.setValue("Token " + accessToken , forHTTPHeaderField: "Authorization")
+
+        if let urlString = urlRequest.url?.absoluteString, urlString.hasPrefix(Glyanec.apiEndpoint) {
+            urlRequest.setValue(accessToken, forHTTPHeaderField: "X-TOKEN")
         }
-        
+
         return urlRequest
     }
 }
 
 extension JWTAccessTokenAdapter: RequestRetrier {
     func should(_ manager: SessionManager, retry request: Request, with error: Error, completion: @escaping RequestRetryCompletion) {
-//        let isRefreshTokenRequest = request.request?.url?.absoluteString.hasSuffix("auth/refresh") ?? false
-//        if !isRefreshTokenRequest || !isRefreshingToken {
-            
             guard let response = request.task?.response as? HTTPURLResponse, response.statusCode == 401 else {
                 if let response = request.task?.response as? HTTPURLResponse {
                     print("response.statusCode", response.statusCode )
@@ -35,38 +32,52 @@ extension JWTAccessTokenAdapter: RequestRetrier {
                 return
             }
             print("response.statusCode", response.statusCode)
-//            isRefreshingToken = true
-//            NetworkAuth.reffreshToken()
-//                .done { (model) in
-//                    self.isRefreshingToken = false
-//                    self.accessToken = model.accessToken
-//                    completion(true, 1)
-//            }
-//            .catch { (error) in
-//                // Save important values
-//                let savingState = UserDefaults.standard.object(forKey: KeyConstant.rememberAccount)
-//                let unsignMode = UserDefaults.standard.bool(forKey: KeyConstant.isInUnsignMode)
-//
-//                // Clean all user defaults
-//                let domain = Bundle.main.bundleIdentifier!
-//                UserDefaults.standard.removePersistentDomain(forName: domain)
-//                UserDefaults.standard.synchronize()
-//                print(Array(UserDefaults.standard.dictionaryRepresentation().keys).count)
-//
-//                UserDefaults.standard.set(savingState, forKey: KeyConstant.rememberAccount)
-//                UserDefaults.standard.set(unsignMode, forKey: KeyConstant.isInUnsignMode)
-//                UserDefaults.standard.synchronize()
-//
-////                VideoModel.shared.clearCache()
-//                if !CurrentUser.shared.isInUnsignMode
-//                {
-////                    Coordinator.shared.showLoginViewController()
-//                }
-//
-//                completion(false, 0)
-//            }
-//        } else {
-//            completion(false, 0)
-//        }
+
+            lock.lock(); defer { lock.unlock() }
+
+            requestsToRetry.append { shouldRetry in
+                completion(shouldRetry, 0)
+            }
+
+            guard !isRefreshingToken else { return }
+
+            isRefreshingToken = true
+            guard let refreshToken = UserAuth.refreshToken, !refreshToken.isEmpty else {
+                completeRetries(shouldRetry: false)
+                clearTokens()
+                return
+            }
+
+            NetworkAuth.refreshToken(refreshToken: refreshToken)
+                .done { model in
+                    if let token = model.token {
+                        KeyChain.set(key: KeyConstant.userToken, string: token)
+                        self.accessToken = token
+                    }
+                    if let refreshToken = model.refresh_token {
+                        KeyChain.set(key: KeyConstant.userRefreshToken, string: refreshToken)
+                    }
+                    self.completeRetries(shouldRetry: true)
+                }
+                .catch { error in
+                    print("Refresh token failed: \(error)")
+                    self.clearTokens()
+                    self.completeRetries(shouldRetry: false)
+                }
+    }
+
+    private func clearTokens() {
+        KeyChain.set(key: KeyConstant.userToken, string: "")
+        KeyChain.set(key: KeyConstant.userRefreshToken, string: "")
+    }
+
+    private func completeRetries(shouldRetry: Bool) {
+        lock.lock(); defer { lock.unlock() }
+        isRefreshingToken = false
+        let queuedRequests = requestsToRetry
+        requestsToRetry.removeAll()
+        queuedRequests.forEach { completion in
+            completion(shouldRetry)
+        }
     }
 }

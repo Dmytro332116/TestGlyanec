@@ -7,6 +7,20 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func updateItems() {
         refreshControl.endRefreshing()
         mainCV.reloadData()
+        updateEmptyState()
+    }
+
+    private func updateEmptyState() {
+        let productsCount = viewModel.categoryProducts?.products.count ?? 0
+        if productsCount == 0 {
+            let emptyLabel = UILabel(frame: mainCV.bounds)
+            emptyLabel.text = "Нічого не знайдено"
+            emptyLabel.textAlignment = .center
+            emptyLabel.numberOfLines = 0
+            mainCV.backgroundView = emptyLabel
+        } else {
+            mainCV.backgroundView = nil
+        }
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -14,14 +28,8 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        var productsCount: Int
-        
-        if viewModel.categoryProducts?.products != nil {
-            productsCount = (viewModel.categoryProducts?.products.count)!
-        } else {
-            productsCount = 0
-        }
-        
+        let productsCount = viewModel.categoryProducts?.products.count ?? 0
+
         switch section {
         case 0:
             return 2
@@ -60,7 +68,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         
         switch indexPath.section {
         case 0:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: mainTopActionCellInditifer, for: indexPath) as! MainTopActionCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: mainTopActionCellInditifer, for: indexPath) as? MainTopActionCell else { return UICollectionViewCell() }
             
             switch indexPath.row {
             case 0:
@@ -72,13 +80,14 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
 
             return cell
         case 1:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: mainItemCollectionCellInditifer, for: indexPath) as! MainItemCell
-            
-            cell.config(item: (viewModel.categoryProducts?.products[indexPath.row])!)
-            
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: mainItemCollectionCellInditifer, for: indexPath) as? MainItemCell else { return UICollectionViewCell() }
+            if let products = viewModel.categoryProducts?.products, indexPath.row < products.count {
+                cell.config(item: products[indexPath.row])
+            }
+
             return cell
         default:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: mainTopActionCellInditifer, for: indexPath) as! MainTopActionCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: mainTopActionCellInditifer, for: indexPath) as? MainTopActionCell else { return UICollectionViewCell() }
             
             cell.config(type: .discount)
             
@@ -97,8 +106,10 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 self.tabBarController?.selectedIndex = 3
             }
         case 1:
-            let item = viewModel.categoryProducts?.products[indexPath.row]
-            Coordinator.shared.goToItemDetailsViewController(id: (item?.id)!)
+            guard let products = viewModel.categoryProducts?.products,
+                  indexPath.row < products.count,
+                  let id = products[indexPath.row].id else { return }
+            Coordinator.shared.goToItemDetailsViewController(id: id)
         default:
             break
         }

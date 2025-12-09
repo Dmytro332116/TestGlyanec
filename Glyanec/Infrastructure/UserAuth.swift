@@ -9,9 +9,9 @@ class UserAuth {
     static var token: String? {
         return KeyChain.get(key: KeyConstant.userToken)
     }
-    
-//    static var refreshToken: String? {
-//        return KeyChain.get(key: KeyConstant.userRefreshToken)
-//    }
+
+    static var refreshToken: String? {
+        return KeyChain.get(key: KeyConstant.userRefreshToken)
+    }
 
 }

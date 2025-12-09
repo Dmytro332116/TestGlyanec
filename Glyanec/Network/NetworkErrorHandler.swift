@@ -3,6 +3,8 @@ import Foundation
 import UIKit
 
 class NetworkErrorHandler {
+
+    static let defaultErrorMessage = "Something went wrong. Please try again."
     
     static func containsError(data: Data) -> (String?) {
 

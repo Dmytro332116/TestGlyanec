@@ -21,6 +21,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Coordinator.shared.showRootViewController()
 
         notificationCenter.delegate = self
+
+        FavoritesStore.shared.preloadFavorites()
+        BasketStore.shared.refresh()
         
         let options: UNAuthorizationOptions = [.alert, .sound, .badge]
         

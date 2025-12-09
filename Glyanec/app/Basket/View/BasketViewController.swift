@@ -82,25 +82,13 @@ class BasketViewController: BaseViewController<BasketViewModel>, BasketViewProto
 extension BasketViewController: BasketPriceCellDelegate {
     func updatePrice(price: Double) {
         let price = String(price)
-        buyB.setTitle(String(format: "Оформити %@ ", price, "₴"), for: .normal)
+        buyB.setTitle(String(format: "Оформити %@ ₴", price), for: .normal)
     }
 }
 
 extension BasketViewController: BasketItemCellDelegate {
     func removeItem(row: Int, itemTitle: String) {
-        viewModel.list?.remove(at: row)
-        
-        var purchaiseList:[BasketModel] = []
-        if let data = UserDefaults.standard.value(forKey:"BasketModel") as? Data {
-            purchaiseList = try! PropertyListDecoder().decode(Array<BasketModel>.self, from: data)
-            purchaiseList.remove(at: row)
-        }
-        
-        UserDefaults.standard.set(try? PropertyListEncoder().encode(viewModel.list), forKey:"ItemBasketModel")
-        UserDefaults.standard.set(try? PropertyListEncoder().encode(purchaiseList), forKey:"BasketModel")
-        
-        self.basketTV.reloadData()
-        
+        viewModel.removeItem(at: row)
         self.appDelegate?.scheduleNotification(notificationType: "Товар видалений з кошика", body: itemTitle)
     }
 }

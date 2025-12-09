@@ -15,17 +15,19 @@ class MainItemCell: UICollectionViewCell, BaseAlert, UNUserNotificationCenterDel
         
     @IBOutlet weak var favoriteButton: UIButton!
     @IBOutlet weak var buyButton: UIButton!
-    
-    var item: ResultProductModel!
+
+    var item: ResultProductModel?
     var appDelegate = UIApplication.shared.delegate as? AppDelegate
     
     func config(item: ResultProductModel) {
         self.item = item
         itemTitleLabel.text = item.title
-        newPriceLabel.text = String(format: "%@ %@", String(item.price!), "₴")
-        oldPriceLabel.text = String(item.price_old!)
-        if item.price_old! != 0.0 {
-            oldPriceLabel.text = String(format: "%@ %@", String(item.price_old!), "₴")
+        let price = item.price ?? 0
+        newPriceLabel.text = String(format: "%@ %@", String(price), "₴")
+        let oldPrice = item.price_old ?? 0
+        oldPriceLabel.text = String(oldPrice)
+        if oldPrice != 0.0 {
+            oldPriceLabel.text = String(format: "%@ %@", String(oldPrice), "₴")
             discountLabel.text = String(format: "%@ %@", String("5"), "%")
             discountLabel.isHidden = false
             oldPriceLabel.isHidden = false
@@ -36,10 +38,12 @@ class MainItemCell: UICollectionViewCell, BaseAlert, UNUserNotificationCenterDel
             discountV.isHidden = true
         }
 
-        if let firstImage = item.images?.first {
-            setItemPreviewImageView(image: firstImage)
-        } else {
-            setItemPreviewImageView(image: "")  // або пустий url
+        let imageURL = item.images?.first ?? item.image ?? ""
+        setItemPreviewImageView(image: imageURL)
+
+        if let id = item.id {
+            let isFavorite = item.is_favorite ?? FavoritesStore.shared.isFavorite(id: id)
+            setFavoriteButton(isFavorite: isFavorite)
         }
 
     }
@@ -63,55 +67,36 @@ class MainItemCell: UICollectionViewCell, BaseAlert, UNUserNotificationCenterDel
 //    }
         
     @IBAction func buyItemAction(_ sender: Any) {
-        var list: [ItemBasketModel] = []
-        var listBasket: [BasketModel] = []
-        if let data = UserDefaults.standard.value(forKey:"ItemBasketModel") as? Data {
-            list = try! PropertyListDecoder().decode(Array<ItemBasketModel>.self, from: data)
-            list.append(ItemBasketModel(id: Int(self.item.id! as String)!,
-                                        title: self.item.title! as String,
-                                        price: String(self.item.price!),
-                                        image: self.item.images![0],
-                                        qty: 1))
-        } else {
-            list.append(ItemBasketModel(id: Int(self.item.id! as String)!,
-                                        title: self.item.title! as String,
-                                        price: String(self.item.price!),
-                                        image: self.item.images![0],
-                                        qty: 1))
-        }
-        
-        if let data = UserDefaults.standard.value(forKey:"BasketModel") as? Data {
-            listBasket = try! PropertyListDecoder().decode(Array<BasketModel>.self, from: data)
-            listBasket.append(BasketModel(id: Int(self.item.id! as String)!,
-                                          qty: 1))
-        } else {
-            listBasket.append(BasketModel(id: Int(self.item.id! as String)!,
-                                          qty: 1))
-        }
-        
-        UserDefaults.standard.set(try? PropertyListEncoder().encode(list), forKey:"ItemBasketModel")
-        UserDefaults.standard.set(try? PropertyListEncoder().encode(listBasket), forKey:"BasketModel")
-        
-        self.appDelegate?.scheduleNotification(notificationType: "Товар додано в кошик", body: self.item.title!)
+        guard let product = item, let productId = product.id else { return }
+
+        let requestItem = BasketRequestItem(id: productId, qty: 1)
+        LoadingSpinner.shared.startActivity()
+        NetworkPurchases.addItems([requestItem])
+            .done { [weak self] response in
+                LoadingSpinner.shared.stopActivity()
+                BasketStore.shared.update(with: response)
+                if let title = product.title {
+                    self?.appDelegate?.scheduleNotification(notificationType: "Товар додано в кошик", body: title)
+                }
+            }
+            .catch { [weak self] error in
+                LoadingSpinner.shared.stopActivity()
+                let message = NetworkErrorHandler.errorMessageFrom(error: error)
+                self?.displayErrorNotification(withText: message ?? NetworkErrorHandler.defaultErrorMessage, sticky: false, action: nil, actionName: "Ok")
+            }
     }
-    
+
     @IBAction func folowItemAction(_ sender: Any) {
-//        LoadingSpinner.shared.startActivity()
-//        NetworkFavorites.addFavorite(id: id)
-//            .done { (oModel) in
-//                LoadingSpinner.shared.stopActivity()
-////                self.view.reloadTableView()
-//                if let model = oModel {
-////                    self.items = model
-//                }
-////                self.view.updateItems()
-//        }
-//        .catch { (error) in
-//            LoadingSpinner.shared.stopActivity()
-////            self.view.reloadTableView()
-//            print(error)
-//            let message = NetworkErrorHandler.errorMessageFrom(error: error)
-//            self.displayErrorNotification(withText: message ?? "", sticky: false, action: nil, actionName: "Ok")
-//        }
+        guard let product = item, let id = product.id else { return }
+        FavoritesStore.shared.toggleFavorite(id: id) { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.setFavoriteButton(isFavorite: FavoritesStore.shared.isFavorite(id: id))
+            }
+        }
+    }
+
+    private func setFavoriteButton(isFavorite: Bool) {
+        let imageName = isFavorite ? "heartFavorite" : "heartUnFavorite"
+        favoriteButton.setImage(UIImage(named: imageName), for: .normal)
     }
 }

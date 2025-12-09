@@ -15,7 +15,7 @@ extension BasketViewController: UITableViewDelegate, UITableViewDataSource, UISc
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return viewModel.list!.count
+            return viewModel.list?.count ?? 0
         default:
             return 1
         }
@@ -44,13 +44,16 @@ extension BasketViewController: UITableViewDelegate, UITableViewDataSource, UISc
         
         switch indexPath.section {
         case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: basketItemCellInditifer, for: indexPath) as! BasketItemCell
-            cell.config(item: viewModel.list![indexPath.row], row: indexPath.row)
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: basketItemCellInditifer, for: indexPath) as? BasketItemCell,
+                  let list = viewModel.list,
+                  indexPath.row < list.count else { return UITableViewCell() }
+            cell.config(item: list[indexPath.row], row: indexPath.row)
             cell.delegate = self
             return cell
         default:
-            let cell = tableView.dequeueReusableCell(withIdentifier: basketPriceCellInditifer, for: indexPath) as! BasketPriceCell
-            cell.config(list: viewModel.list!)
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: basketPriceCellInditifer, for: indexPath) as? BasketPriceCell,
+                  let list = viewModel.list else { return UITableViewCell() }
+            cell.config(list: list)
             cell.delegate = self
             return cell
         }

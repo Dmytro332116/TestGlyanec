@@ -22,12 +22,15 @@ class BasketItemCell: UITableViewCell {
     func config(item: ItemBasketModel, row: Int) {
         itemIndex = row
         titleL.text = item.title
-        
-        priceL.text = String(format: "%@ %@", item.price, "₴")
-        counterL.text = String(item.qty)
-        sumPriceL.text = String(format: "%@ %@", item.price, "₴")
-        
-        setItemPreviewImageView(image: item.image)
+
+        let price = item.safePrice
+        let qty = max(item.safeQty, 1)
+        priceL.text = String(format: "%@ %@", String(price), "₴")
+        counterL.text = String(qty)
+        sumPriceL.text = String(format: "%@ %@", String(price * Double(qty)), "₴")
+
+        let preview = item.displayImage ?? ""
+        setItemPreviewImageView(image: preview)
     }
     
     func setItemPreviewImageView(image:String) {
@@ -41,7 +44,8 @@ class BasketItemCell: UITableViewCell {
     }
     
     @IBAction func removeItemBAction(_ sender: Any) {
-        self.delegate?.removeItem(row: itemIndex!, itemTitle: titleL.text!)
+        guard let row = itemIndex else { return }
+        self.delegate?.removeItem(row: row, itemTitle: titleL.text ?? "")
     }
 
 }

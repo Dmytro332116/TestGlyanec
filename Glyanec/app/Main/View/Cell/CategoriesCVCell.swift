@@ -7,16 +7,15 @@ class CategoriesCVCell: UICollectionViewCell, BaseAlert  {
     
     @IBOutlet weak var itemTitleLabel: UILabel!
     
-//    var id: String = ""
-    
-//    func config(item: ResultItemListModel) {
-    func config() {
-//        id = String(item.id)
-        itemTitleLabel.text = "basdfkjhag"
-        
-//        setItemPreviewImageView(image: item.image)
+    func config(item: ResultCategorysListModel) {
+        itemTitleLabel.text = item.name
+        if let imagePath = item.image {
+            setItemPreviewImageView(images: imagePath)
+        } else {
+            itemIV.image = UIImage(named: "placeholder")
+        }
     }
-    
+
     func setItemPreviewImageView(images:String) {
         if let imageCache = SDImageCache.shared.imageFromCache(forKey: images) {
             itemIV.image = imageCache

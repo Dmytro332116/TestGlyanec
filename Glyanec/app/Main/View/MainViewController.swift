@@ -36,6 +36,7 @@ class MainViewController: BaseViewController<MainViewModel>, MainViewProtocol {
         let refresh = UIRefreshControl()
         refresh.addTarget(self, action: #selector(reloadData), for: .valueChanged)
         mainCV.refreshControl = refresh
+        self.refreshControl = refresh
         mainCV.contentInsetAdjustmentBehavior = .never
         
         self.mainCV.register(UINib(nibName: "MainItemCell", bundle: nil), forCellWithReuseIdentifier: mainItemCollectionCellInditifer)
@@ -49,6 +50,7 @@ class MainViewController: BaseViewController<MainViewModel>, MainViewProtocol {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        FavoritesStore.shared.preloadFavorites()
         viewModel.getCategoryProducts()
     }
     
@@ -79,8 +81,11 @@ class MainViewController: BaseViewController<MainViewModel>, MainViewProtocol {
     }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
-        if (textField.text!.count > 2) {
-            viewModel.searchByString(text: textField.text!)
+        guard let text = textField.text else { return }
+        if text.count > 2 {
+            viewModel.searchByString(text: text)
+        } else if text.isEmpty {
+            viewModel.getCategoryProducts()
         }
     }
         

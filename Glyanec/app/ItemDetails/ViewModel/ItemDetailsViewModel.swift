@@ -7,16 +7,17 @@ class ItemDetailsViewModel: ViewModel, BaseAlert {
     var view: ItemDetailsViewProtocol!
     
     var itemDetails: ResultProductsListModel?
-    var id: Int?
-    
+    var id: String?
+
     init(view: ItemDetailsViewProtocol, id: String) {
         self.view = view
-        self.id = Int(id)
+        self.id = id
     }
     
     func getItemDetails() {
+        guard let id else { return }
         LoadingSpinner.shared.startActivity()
-        NetworkProducts.getProductDetails(id: self.id!)
+        NetworkProducts.getProductDetails(id: id)
             .done { (oModel) in
                 LoadingSpinner.shared.stopActivity()
                 self.view.reloadTableView()
